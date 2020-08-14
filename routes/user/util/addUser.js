@@ -1,9 +1,9 @@
-const User = require("../../modals/user");
-const registrationSchema = require("../../utils/joi_schema/registerUser");
-const hashPassword = require("./util/hashPassword");
+const { User } = require("../../../modals");
+const { userRegistrationSchema } = require("../../../utils/joi_schema");
+const hashPassword = require("./hashPassword");
 
 module.exports = async (user) => {
-  const result = registrationSchema.validate(user);
+  const result = userRegistrationSchema.validate(user);
   if (result.error) return { err: result.error.message };
   let isEmailUsed = await User.find({ email: user.email });
   if (isEmailUsed.length) return { err: "email address already registered" };

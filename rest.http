@@ -9,6 +9,21 @@ Content-Type: application/json
     "username":"anthonyfinix",
     "password":"anthonyfinix@123"
 }
+### USER
+POST http://localhost:5000/api/user/logout HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"anthonyfinix",
+    "password":"anthonyfinix@123"
+}
+### REFRESH TOKEN
+POST http://localhost:5000/api/user/refresh HTTP/1.1
+Content-Type: application/json
+
+{
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFudGhvbnlmaW5peCIsImlhdCI6MTU5NzI0NTY4NCwiZXhwIjoxNTk5NjY0ODg0fQ.28PVNyeDgIV27HS5Tfy0D_TI1Yr040W-Uey3eXW5XtM"
+}
 
 ### REGISTER
 POST http://localhost:5000/api/user/register HTTP/1.1

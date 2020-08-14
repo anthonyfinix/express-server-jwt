@@ -1,17 +1,13 @@
 const router = require("express").Router();
-const authenticate = require("./authenticate");
-const registerUser = require("./registerUser");
 
-router.post("/login", (req, res) => {
-  const {username,password} = req.body;
-  authenticate({username,password})
-  .then(response=>res.json(response));
-});
-router.post("/register", (req, res) => {
-  const { name, username, password, confirmPassword ,email } = req.body;
-  registerUser({name, username, password, confirmPassword ,email}).then((response) => {
-    res.json(response);
-  });
-});
+const login = require("./login");
+const logout = require("./logout");
+const register = require("./register");
+const refresh = require("./refresh");
+
+router.post("/login", login);
+router.post("/logout", logout);
+router.post("/register", register);
+router.post("/refresh", refresh);
 
 module.exports = router;

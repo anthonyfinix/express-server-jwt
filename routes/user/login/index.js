@@ -5,13 +5,12 @@ const User = require("../../../modals/user");
 module.exports = async (req, res) => {
   const { username, password } = req.body;
   let isUser = await User.find({ username });
-  if (!isUser.length) return { err: "You are not registered" };
+  if (!isUser.length) return res.json({ err: "You are not registered" });
   let isPassword = await bcrypt.compare(password, isUser[0].password);
-  if (!isPassword) return { err: "Password does not match" };
+  if (!isPassword) return res.json({ err: "Password does not match" });
   let accessToken = jwt.sign(
     {
       username: isUser[0].username,
-      email: isUser[0].email,
       name: isUser[0].name,
     },
     process.env.JWT_SECRET,
@@ -23,5 +22,5 @@ module.exports = async (req, res) => {
     email: isUser[0].email,
     accessToken,
   };
-  return response;
+  res.json(response);
 };

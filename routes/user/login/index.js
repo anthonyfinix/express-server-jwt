@@ -1,12 +1,27 @@
-const authenticate = require("../util/authenticate");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../../../modals/user");
 
 module.exports = async (req, res) => {
   const { username, password } = req.body;
-  let response = await authenticate({ username, password });
-  if(response.err) return res.json({err:response.err});
-  res.cookie("refreshToken", response.refreshToken, {
-    maxAge: 60 * 60 * 24 * 365 * 10,
-    httOnly: true,
-  });
-  res.json({ name:response.name,username:response.username,email:response.email,token:response.accessToken });
+  let isUser = await User.find({ username });
+  if (!isUser.length) return { err: "You are not registered" };
+  let isPassword = await bcrypt.compare(password, isUser[0].password);
+  if (!isPassword) return { err: "Password does not match" };
+  let accessToken = jwt.sign(
+    {
+      username: isUser[0].username,
+      email: isUser[0].email,
+      name: isUser[0].name,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+  let response = {
+    name: isUser[0].name,
+    username: isUser[0].username,
+    email: isUser[0].email,
+    accessToken,
+  };
+  return response;
 };

@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../../modals/user");
+const config = require('../../../config');
 
 module.exports = async (req, res) => {
   const { username, password } = req.body;
@@ -12,7 +13,7 @@ module.exports = async (req, res) => {
   let accessToken = jwt.sign(
     { username: user.username, email: user.email },
     process.env.JWT_SECRET,
-    { expiresIn: "10s" }
+    { expiresIn: config.ACCESS_TOKEN_EXPIRE }
   );
   let response = {
     name: user.name,
@@ -24,11 +25,11 @@ module.exports = async (req, res) => {
   let refreshToken = jwt.sign(
     { username: user.username, email: user.email },
     process.env.JWT_SECRET + user.password,
-    { expiresIn: "7d" }
+    { expiresIn: config.REFRESH_TOKEN_EXPIRE }
   );
   res.set({ "x-token": accessToken });
   res.cookie("refreshToken", refreshToken, {
-    maxAge: 86400000,
+    maxAge: config.REFRESH_COOKIE_EXPIRE,
     httpOnly: true,
   });
   res.json(response);

@@ -1,6 +1,6 @@
-const logger = require('./logger');
+// const logger = require('./logger');
 
 module.exports = (req, res, next) => {
-  logger.info(req.originalUrl);
+  console.log(req.originalUrl);
   next();
 };

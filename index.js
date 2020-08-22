@@ -24,8 +24,10 @@ db.init().then(() => {
   });
   app.use("/api", api);
   app.use('/test',(req,res)=>{
-    if(req.user) res.send(req.user)
-    res.send('No user found')
+    let response = {}
+    if(req.user) response.user = req.user;
+    if(req.cookies) response.cookies = req.cookies;
+    res.json(response)
   })
   app.use(notFound);
   app.use(errorHandle);

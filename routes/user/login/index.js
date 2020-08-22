@@ -4,23 +4,32 @@ const User = require("../../../modals/user");
 
 module.exports = async (req, res) => {
   const { username, password } = req.body;
-  let isUser = await User.find({ username });
-  if (!isUser.length) return res.json({ err: "You are not registered" });
-  let isPassword = await bcrypt.compare(password, isUser[0].password);
+  let user = await User.findOne({ username: username });
+  console.log(user);
+  if (!user) return res.json({ err: "You are not registered" });
+  let isPassword = await bcrypt.compare(password, user.password);
   if (!isPassword) return res.json({ err: "Password does not match" });
   let accessToken = jwt.sign(
-    {
-      username: isUser[0].username,
-      name: isUser[0].name,
-    },
+    { username: user.username, email: user.email },
     process.env.JWT_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: "10s" }
   );
   let response = {
-    name: isUser[0].name,
-    username: isUser[0].username,
-    email: isUser[0].email,
+    name: user.name,
+    username: user.username,
+    email: user.email,
     accessToken,
   };
+
+  let refreshToken = jwt.sign(
+    { username: user.username, email: user.email },
+    process.env.JWT_SECRET + user.password,
+    { expiresIn: "7d" }
+  );
+  res.set({ "x-token": accessToken });
+  res.cookie("refreshToken", refreshToken, {
+    maxAge: 86400000,
+    httpOnly: true,
+  });
   res.json(response);
 };

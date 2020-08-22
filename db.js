@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports={
     init:async function init(){
-        mongoose
+        return mongoose
           .connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,

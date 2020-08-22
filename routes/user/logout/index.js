@@ -1,3 +1,4 @@
 module.exports = (req, res) => {
-  res.json({ test: "logout" });
+  res.clearCookie('refreshToken')
+  res.json({success:'successfully logged out'})
 };

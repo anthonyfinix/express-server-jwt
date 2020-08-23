@@ -11,4 +11,5 @@
 - [x] Setup Heroku and Deploy Basic Setup
 - [x] Setup Logger with Winston
 - [x] Setup User Register
-- [ ] Setup User Authenticate
+- [x] Setup User Authenticate
+- [x] Setup Refresh token as httponly cookie (not secure tag enabled for development reasons)

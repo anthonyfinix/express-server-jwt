@@ -1,8 +1,0 @@
-### ROOT
-GET http://localhost:5000/
-
-### 404
-GET http://localhost:5000/notFound
-
-###test
-GET http://localhost:5000/test
